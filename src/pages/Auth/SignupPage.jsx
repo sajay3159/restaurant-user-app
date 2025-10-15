@@ -4,59 +4,51 @@ import {
   Button,
   Card,
   CardContent,
-  Typography,
   TextField,
+  Typography,
   CircularProgress,
   Link as MuiLink,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { authActions } from "../../store/authSlice";
-import { loginUser } from "../../api/firebaseAuth";
+import { signupUser } from "../../api/firebaseAuth";
 
-const LoginPage = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
+const SignupPage = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
+  const confirmPasswordRef = useRef();
+  const navigate = useNavigate();
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const forgetPasswordHandler = () => {
-    navigate("/forget");
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
+    const confirmPassword = confirmPasswordRef.current.value;
 
-    setLoading(true);
-    setError("");
-    setSuccess("");
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      setLoading(false);
+      return;
+    }
 
     try {
-      const data = await loginUser(email, password);
-      dispatch(
-        authActions.login({
-          token: data.idToken,
-          email: data.email,
-          uid: data.localId,
-        })
-      );
-
-      setSuccess("Login successful!");
-      navigate("/dashboard");
+      await signupUser(email, password);
+      setSuccess("Signup successful");
+      setError("");
+      navigate("/login");
     } catch (err) {
-      setError(err.message || "Login failed. Please try again.");
+      setError(err.message || "Signup failed");
+      setSuccess("");
     } finally {
       setLoading(false);
       emailRef.current.value = "";
       passwordRef.current.value = "";
+      confirmPasswordRef.current.value = "";
     }
   };
 
@@ -73,8 +65,8 @@ const LoginPage = () => {
     >
       <Card variant="outlined">
         <CardContent>
-          <Typography variant="h5" textAlign="center" mb={2}>
-            Login
+          <Typography variant="h5" align="center" mb={3}>
+            Sign Up
           </Typography>
 
           <form onSubmit={handleSubmit}>
@@ -94,18 +86,22 @@ const LoginPage = () => {
               margin="normal"
               required
             />
+            <TextField
+              label="Confirm Password"
+              type="password"
+              inputRef={confirmPasswordRef}
+              fullWidth
+              margin="normal"
+              required
+            />
 
             {error && (
-              <Typography variant="body2" color="error" textAlign="center">
+              <Typography variant="body2" color="error" align="center">
                 {error}
               </Typography>
             )}
             {success && (
-              <Typography
-                variant="body2"
-                color="success.main"
-                textAlign="center"
-              >
+              <Typography variant="body2" color="success.main" align="center">
                 {success}
               </Typography>
             )}
@@ -122,36 +118,29 @@ const LoginPage = () => {
                 {loading ? (
                   <>
                     <CircularProgress size={20} sx={{ mr: 1 }} />
-                    Logging in...
+                    Signing up...
                   </>
                 ) : (
-                  "Login"
+                  "Sign Up"
                 )}
               </Button>
-            </Box>
-
-            <Box mt={2} textAlign="center">
-              <MuiLink
-                component="button"
-                onClick={forgetPasswordHandler}
-                underline="hover"
-                color="primary"
-              >
-                Forget Password?
-              </MuiLink>
             </Box>
           </form>
         </CardContent>
       </Card>
 
-      {/* Signup */}
       <Card variant="outlined" sx={{ backgroundColor: "#c3dbcf" }}>
         <CardContent>
-          <Typography textAlign="center">
-            Don't have an account?{" "}
-            <Link component={Link} to="/signup" underline="hover" color="blue">
-              Sign up
-            </Link>
+          <Typography align="center">
+            Have an account?{" "}
+            <MuiLink
+              component={Link}
+              to="/login"
+              underline="hover"
+              color="blue"
+            >
+              Login
+            </MuiLink>
           </Typography>
         </CardContent>
       </Card>
@@ -159,4 +148,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignupPage;

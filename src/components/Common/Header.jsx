@@ -10,6 +10,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
 import { AppBar } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
@@ -31,8 +32,8 @@ const Header = () => {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component={Link}
+            to="/dashboard"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },

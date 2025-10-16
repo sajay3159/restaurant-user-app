@@ -50,7 +50,7 @@ const LoginPage = () => {
       );
 
       setSuccess("Login successful!");
-      navigate("/dashboard");
+      navigate("/home");
     } catch (err) {
       setError(err.message || "Login failed. Please try again.");
     } finally {

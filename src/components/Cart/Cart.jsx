@@ -64,7 +64,7 @@ const Cart = ({ open, onClose }) => {
                   alignItems="center"
                   justifyContent="space-between"
                 >
-                  <Grid item xs={6}>
+                  <Grid>
                     <CardMedia
                       component="img"
                       image={item.imageUrl}
@@ -72,7 +72,7 @@ const Cart = ({ open, onClose }) => {
                       sx={{ height: 80, width: 100, borderRadius: 1 }}
                     />
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid>
                     <Typography fontWeight="bold">{item.name}</Typography>
                     <Typography variant="body2">
                       ${item.price} x {item.quantity}

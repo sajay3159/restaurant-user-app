@@ -4,23 +4,55 @@ import ForgetPage from "./pages/Auth/ForgetPage";
 import SignupPage from "./pages/Auth/SignupPage";
 import Layout from "./components/Layout/Layout";
 import Home from "./pages/Home/Home";
+import PublicRoute from "./pages/Auth/PublicRoute";
+import ProtectedRoute from "./pages/Auth/ProtectedRoute";
 import CategoryDetails from "./components/categories/CategoryDetails";
 
 const AppRoutes = () => {
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="home" element={<Home />} />
-          <Route path="category/:categoryId" element={<CategoryDetails />} />
-        </Route>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/forget" element={<ForgetPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+    <Routes>
+      {/* Public Routes */}
+      <Route
+        path="/login"
+        element={
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/forget"
+        element={
+          <PublicRoute>
+            <ForgetPage />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/signup"
+        element={
+          <PublicRoute>
+            <SignupPage />
+          </PublicRoute>
+        }
+      />
 
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    </>
+      {/* Protected Routes */}
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="home" element={<Home />} />
+        <Route path="category/:categoryId" element={<CategoryDetails />} />
+      </Route>
+
+      {/* Redirect unknown routes */}
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
   );
 };
 

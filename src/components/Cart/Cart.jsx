@@ -5,43 +5,20 @@ import {
   Typography,
   IconButton,
   Divider,
-  TextField,
   CardMedia,
   Grid,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useDispatch, useSelector } from "react-redux";
-import { cartActions } from "../../store/cartSlice";
+import { useSelector } from "react-redux";
 import QuantitySelector from "../Common/QuantitySelector";
 
 const Cart = ({ open, onClose }) => {
-  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
 
   const total = cart.items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-
-  const handleRemoveToCart = (itemId) => {
-    try {
-      dispatch(cartActions.removeToCart(itemId));
-    } catch (error) {
-      console.error("Failed to remove item from cart:", error);
-    }
-  };
-
-  const handleQuantityChange = (itemId, newQuantity) => {
-    const quantity = parseInt(newQuantity);
-
-    if (isNaN(quantity) || quantity < 1) return;
-
-    try {
-      dispatch(cartActions.updateQuantity({ id: itemId, quantity }));
-    } catch (error) {
-      console.error("Failed to update quantity", error);
-    }
-  };
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
@@ -81,7 +58,7 @@ const Cart = ({ open, onClose }) => {
             </Typography>
           ) : (
             cart.items.map((item) => (
-              <Box key={item.id} sx={{ mb: 3 }}>
+              <Box key={item.id} sx={{ mb: 3, mr: 2 }}>
                 <Grid
                   container
                   alignItems="center"

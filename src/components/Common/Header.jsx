@@ -9,13 +9,17 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
-import { AppBar } from "@mui/material";
+import { AppBar, Badge } from "@mui/material";
 import { Link } from "react-router-dom";
+import Cart from "../Cart/Cart";
+import { useSelector } from "react-redux";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const Header = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [cartOpen, setCartOpen] = useState(false);
+  const totalCartItems = useSelector((state) => state.cart.items.length);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -48,12 +52,20 @@ const Header = () => {
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <IconButton edge="end" color="inherit" aria-label="cart">
-              <ShoppingCartIcon />
+            <IconButton
+              edge="end"
+              color="inherit"
+              aria-label="cart"
+              onClick={() => setCartOpen(true)}
+            >
+              <Badge badgeContent={totalCartItems} color="error">
+                <ShoppingCartIcon />
+              </Badge>
               <Typography variant="body1" sx={{ ml: 1 }}>
                 Cart
               </Typography>
             </IconButton>
+            <Cart open={cartOpen} onClose={() => setCartOpen(false)} />
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />

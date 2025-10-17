@@ -6,7 +6,8 @@ import Layout from "./components/Layout/Layout";
 import Home from "./pages/Home/Home";
 import PublicRoute from "./pages/Auth/PublicRoute";
 import ProtectedRoute from "./pages/Auth/ProtectedRoute";
-import CategoryDetails from "./components/categories/CategoryDetails";
+import CategoryRecipesPage from "./pages/Categories/CategoryRecipesPage";
+import Cart from "./components/Cart/Cart";
 
 const AppRoutes = () => {
   return (
@@ -47,7 +48,8 @@ const AppRoutes = () => {
         }
       >
         <Route path="home" element={<Home />} />
-        <Route path="category/:categoryId" element={<CategoryDetails />} />
+        <Route path="category/:categoryId" element={<CategoryRecipesPage />} />
+        <Route path="cart" element={<Cart />} />
       </Route>
 
       {/* Redirect unknown routes */}

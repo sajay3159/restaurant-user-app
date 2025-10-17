@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getRecipes } from "../../api/recipes";
 import { getCategories } from "../../api/categories";
 import {
@@ -14,12 +14,21 @@ import {
   CardActions,
   Button,
 } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { cartActions } from "../../store/cartSlice";
+import NotificationSnackbar from "../../components/Common/NotificationSnackbar";
 
-const CategoryDetails = () => {
+const CategoryRecipesPage = () => {
+  const dispatch = useDispatch();
   const { categoryId } = useParams();
   const [categoryName, setCategoryName] = useState("");
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   const fetchData = async () => {
     try {
@@ -42,6 +51,36 @@ const CategoryDetails = () => {
       setLoading(false);
     }
   };
+
+  const handleAddToCart = useCallback(
+    (recipe) => {
+      try {
+        dispatch(
+          cartActions.addToCart({
+            id: recipe.id,
+            name: recipe.name,
+            price: recipe.price,
+            imageUrl: recipe.imageUrl,
+          })
+        );
+        setSnackbar({
+          open: true,
+          message: "Added to cart",
+          severity: "success",
+        });
+      } catch (error) {
+        console.error("Failed to add to cart:", error);
+        setSnackbar({
+          open: true,
+          message: "Failed to add item to cart",
+          severity: "error",
+        });
+      } finally {
+        setLoading(false);
+      }
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     fetchData();
@@ -66,7 +105,7 @@ const CategoryDetails = () => {
       ) : (
         <Grid container spacing={3}>
           {recipes.map((recipe) => (
-            <Grid item xs={12} sm={6} md={4} key={recipe.id}>
+            <Grid key={recipe.id}>
               <Card
                 sx={{
                   maxWidth: 345,
@@ -88,6 +127,7 @@ const CategoryDetails = () => {
                   <Typography
                     variant="body2"
                     color="text.primary"
+                    component="div"
                     sx={{ mb: 1 }}
                   >
                     <Box width={220}>Ingredients: {recipe.ingredient}</Box>
@@ -103,7 +143,7 @@ const CategoryDetails = () => {
                     variant="contained"
                     color="primary"
                     fullWidth
-                    onClick={() => console.log("Add to cart:", recipe.name)}
+                    onClick={() => handleAddToCart(recipe)}
                   >
                     Add to Cart
                   </Button>
@@ -113,8 +153,14 @@ const CategoryDetails = () => {
           ))}
         </Grid>
       )}
+      <NotificationSnackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      />
     </Container>
   );
 };
 
-export default CategoryDetails;
+export default CategoryRecipesPage;

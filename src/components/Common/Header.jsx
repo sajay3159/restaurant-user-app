@@ -10,16 +10,28 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
 import { AppBar, Badge } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cart from "../Cart/Cart";
-import { useSelector } from "react-redux";
-
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../../store/authSlice";
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [cartOpen, setCartOpen] = useState(false);
   const totalCartItems = useSelector((state) => state.cart.items.length);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+  const settings = isLoggedIn && [
+    { label: "Profile", path: "/profile" },
+    { label: "Logout", path: "/logout" },
+  ];
+
+  const handleLogout = () => {
+    dispatch(authActions.logout());
+    navigate("/login");
+  };
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -71,30 +83,42 @@ const Header = () => {
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+            {isLoggedIn && (
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem
+                    key={setting.label}
+                    onClick={() => {
+                      handleCloseUserMenu();
+                      if (setting.label === "Logout") {
+                        handleLogout();
+                      } else {
+                        navigate(setting.path);
+                      }
+                    }}
+                  >
+                    <Typography sx={{ textAlign: "center" }}>
+                      {setting.label}
+                    </Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            )}
           </Box>
         </Toolbar>
       </Container>

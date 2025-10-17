@@ -8,6 +8,7 @@ import PublicRoute from "./pages/Auth/PublicRoute";
 import ProtectedRoute from "./pages/Auth/ProtectedRoute";
 import CategoryRecipesPage from "./pages/Categories/CategoryRecipesPage";
 import Cart from "./components/Cart/Cart";
+import ProfilePage from "./pages/Profile/ProfilePage";
 
 const AppRoutes = () => {
   return (
@@ -50,6 +51,7 @@ const AppRoutes = () => {
         <Route path="home" element={<Home />} />
         <Route path="category/:categoryId" element={<CategoryRecipesPage />} />
         <Route path="cart" element={<Cart />} />
+        <Route path="profile" element={<ProfilePage />} />
       </Route>
 
       {/* Redirect unknown routes */}

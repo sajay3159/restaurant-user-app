@@ -3,7 +3,6 @@ import {
   Typography,
   TextField,
   Button,
-  Avatar,
   Container,
   Snackbar,
   Alert,
@@ -19,8 +18,11 @@ const DATABASE_URL =
 const ProfilePage = () => {
   const navigate = useNavigate();
   const userId = useSelector((state) => state.auth.uid);
+
   const [name, setName] = useState("");
-  const [profileUrl, setProfileUrl] = useState("update your profile img url");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -31,8 +33,9 @@ const ProfilePage = () => {
       const response = await fetch(`${DATABASE_URL}${userId}.json`);
       const data = await response.json();
       if (data) {
-        setName(data.name);
-        setProfileUrl(data.profileUrl);
+        setName(data.name || "");
+        setPhone(data.phone || "");
+        setAddress(data.address || "");
       }
     } catch (error) {
       setError("Failed to load profile data");
@@ -44,9 +47,11 @@ const ProfilePage = () => {
   const handleSave = async () => {
     try {
       setError("");
+
       const profileData = {
-        name: name,
-        profileUrl: profileUrl,
+        name,
+        phone,
+        address,
       };
 
       const response = await fetch(`${DATABASE_URL}${userId}.json`, {
@@ -60,6 +65,7 @@ const ProfilePage = () => {
       if (!response.ok) {
         throw new Error("Failed to save profile data");
       }
+
       setSnackbarMessage("Profile saved successfully!");
       setOpenSnackbar(true);
     } catch (error) {
@@ -86,8 +92,9 @@ const ProfilePage = () => {
   return (
     <Container maxWidth="sm" sx={{ textAlign: "center", mt: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Profile Page
+        Update Profile
       </Typography>
+
       <IconButton
         edge="start"
         color="inherit"
@@ -96,27 +103,36 @@ const ProfilePage = () => {
       >
         <ArrowBack />
       </IconButton>
-      <Avatar
-        src={profileUrl}
-        alt="Profile Image"
-        sx={{ width: 150, height: 150, margin: "0 auto", mb: 3 }}
-      />
+
       <TextField
-        label="Name"
+        label="Full Name"
         variant="outlined"
         fullWidth
         value={name}
         onChange={(e) => setName(e.target.value)}
         sx={{ marginBottom: 2 }}
       />
+
       <TextField
-        label="Profile Image URL"
+        label="Phone Number"
         variant="outlined"
         fullWidth
-        value={profileUrl}
-        onChange={(e) => setProfileUrl(e.target.value)}
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        sx={{ marginBottom: 2 }}
+      />
+
+      <TextField
+        label="Address"
+        variant="outlined"
+        fullWidth
+        multiline
+        rows={3}
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
         sx={{ marginBottom: 3 }}
       />
+
       <Button
         variant="contained"
         color="primary"
@@ -125,7 +141,13 @@ const ProfilePage = () => {
       >
         Save
       </Button>
-      {error && <Typography color="error">{error}</Typography>}
+
+      {error && (
+        <Typography color="error" mt={2}>
+          {error}
+        </Typography>
+      )}
+
       <Snackbar
         open={openSnackbar}
         autoHideDuration={3000}

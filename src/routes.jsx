@@ -9,6 +9,7 @@ import ProtectedRoute from "./pages/Auth/ProtectedRoute";
 import CategoryRecipesPage from "./pages/Categories/CategoryRecipesPage";
 import Cart from "./components/Cart/Cart";
 import ProfilePage from "./pages/Profile/ProfilePage";
+import CheckoutPage from "./pages/Checkout/CheckoutPage";
 
 const AppRoutes = () => {
   return (
@@ -49,10 +50,18 @@ const AppRoutes = () => {
         }
       >
         <Route path="home" element={<Home />} />
+        <Route path="profile" element={<ProfilePage />} />
         <Route path="category/:categoryId" element={<CategoryRecipesPage />} />
         <Route path="cart" element={<Cart />} />
-        <Route path="profile" element={<ProfilePage />} />
       </Route>
+      <Route
+        path="checkout"
+        element={
+          <ProtectedRoute>
+            <CheckoutPage />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Redirect unknown routes */}
       <Route path="*" element={<Navigate to="/login" replace />} />

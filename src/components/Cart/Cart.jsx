@@ -11,14 +11,20 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
 import QuantitySelector from "../Common/QuantitySelector";
+import { useNavigate } from "react-router-dom";
 
 const Cart = ({ open, onClose }) => {
+  const navigate = useNavigate();
   const cart = useSelector((state) => state.cart);
 
   const total = cart.items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  const checkoutHandler = () => {
+    navigate("/checkout");
+  };
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
@@ -105,6 +111,7 @@ const Cart = ({ open, onClose }) => {
             color="primary"
             size="large"
             disabled={cart.items.length === 0}
+            onClick={() => checkoutHandler()}
           >
             Purchase
           </Button>

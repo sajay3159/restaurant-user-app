@@ -155,6 +155,25 @@ const LoginPage = () => {
           </Typography>
         </CardContent>
       </Card>
+      <Box mt={2}>
+        <Card variant="outlined">
+          <CardContent sx={{ textAlign: "center" }}>
+            <Typography variant="body2" mb={1}>
+              Want to login as Admin?
+            </Typography>
+            <Button
+              variant="text"
+              color="primary"
+              onClick={() =>
+                (window.location.href =
+                  "https://restaurant-admin-panel-nine.vercel.app")
+              }
+            >
+              Admin Login
+            </Button>
+          </CardContent>
+        </Card>
+      </Box>
     </Box>
   );
 };

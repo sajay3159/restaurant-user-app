@@ -1,4 +1,4 @@
-import firebaseConfig from "../../FirebaseConfig";
+import firebaseConfig from "../firebaseConfig";
 
 const API_KEY = firebaseConfig.apiKey;
 

@@ -158,9 +158,7 @@ const LoginPage = () => {
       <Box mt={2}>
         <Card variant="outlined">
           <CardContent sx={{ textAlign: "center" }}>
-            <Typography variant="body2" mb={1}>
-              Want to login as Admin?
-            </Typography>
+            <Typography variant="body2">Want to login as Admin?</Typography>
             <Button
               variant="text"
               color="primary"

@@ -50,6 +50,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       >
+        <Route index element={<Navigate to="home" replace />} />
         <Route path="home" element={<Home />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="category/:categoryId" element={<CategoryRecipesPage />} />

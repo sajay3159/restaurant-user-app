@@ -14,7 +14,7 @@ import {
   CardActions,
   Button,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { cartActions } from "../../store/cartSlice";
 import NotificationSnackbar from "../../components/Common/NotificationSnackbar";
 

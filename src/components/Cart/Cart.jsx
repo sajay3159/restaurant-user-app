@@ -17,7 +17,7 @@ const Cart = ({ open, onClose }) => {
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart);
 
-  const total = cart.items.reduce(
+  const total = (cart?.items || []).reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
@@ -58,7 +58,7 @@ const Cart = ({ open, onClose }) => {
 
         {/* Cart Items */}
         <Box sx={{ flexGrow: 1, overflowY: "auto", mt: 2 }}>
-          {cart.items.length === 0 ? (
+          {(cart?.items?.length || 0) === 0 ? (
             <Typography variant="body1" sx={{ mt: 4, textAlign: "center" }}>
               Your cart is empty.
             </Typography>
@@ -110,7 +110,7 @@ const Cart = ({ open, onClose }) => {
             variant="contained"
             color="primary"
             size="large"
-            disabled={cart.items.length === 0}
+            disabled={(cart?.items?.length || 0) === 0}
             onClick={() => checkoutHandler()}
           >
             Purchase

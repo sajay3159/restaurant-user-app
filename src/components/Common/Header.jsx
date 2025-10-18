@@ -20,11 +20,12 @@ const Header = () => {
   const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [cartOpen, setCartOpen] = useState(false);
-  const totalCartItems = useSelector((state) => state.cart.items.length);
+  const totalCartItems = useSelector((state) => state.cart?.items?.length || 0);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const settings = isLoggedIn && [
     { label: "Profile", path: "/profile" },
+    { label: "Order", path: "/orderHistory" },
     { label: "Logout", path: "/logout" },
   ];
 

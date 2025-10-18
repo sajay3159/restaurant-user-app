@@ -10,6 +10,7 @@ import CategoryRecipesPage from "./pages/Categories/CategoryRecipesPage";
 import Cart from "./components/Cart/Cart";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import CheckoutPage from "./pages/Checkout/CheckoutPage";
+import OrderHistory from "./pages/history/OrderHistory";
 
 const AppRoutes = () => {
   return (
@@ -53,6 +54,7 @@ const AppRoutes = () => {
         <Route path="profile" element={<ProfilePage />} />
         <Route path="category/:categoryId" element={<CategoryRecipesPage />} />
         <Route path="cart" element={<Cart />} />
+        <Route path="orderHistory" element={<OrderHistory />} />
       </Route>
       <Route
         path="checkout"

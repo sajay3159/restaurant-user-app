@@ -173,7 +173,7 @@ const CheckoutPage = () => {
               </Button>
               {orderSuccess && (
                 <Typography mt={2} color="success.main">
-                  ✅ Order placed successfully! Redirecting...
+                  Order placed successfully
                 </Typography>
               )}
             </Box>

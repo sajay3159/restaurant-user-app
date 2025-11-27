@@ -1,11 +1,23 @@
-import { Card, CardContent, Typography, Box, Stack } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  Stack,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { getOrders } from "../../api/order";
 import NotificationSnackbar from "../../components/Common/NotificationSnackbar";
+import OrderSortDropdown from "../../components/Common/OrderSortDropdown";
 
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [originalOrders, setOriginalOrders] = useState([]);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -15,7 +27,9 @@ const OrderHistory = () => {
     setLoading(true);
     try {
       const data = await getOrders();
+      // console.log("data", data);
       setOrders(data);
+      setOriginalOrders(data);
     } catch (error) {
       setSnackbar({
         open: true,
@@ -27,6 +41,18 @@ const OrderHistory = () => {
     }
   };
 
+  const handleSortChange = (sortType) => {
+    let sorted = [...originalOrders];
+
+    if (sortType === "newest") {
+      sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } else if (sortType === "oldest") {
+      sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    }
+
+    setOrders(sorted);
+  };
+
   useEffect(() => {
     fetchOrders();
   }, []);
@@ -36,6 +62,18 @@ const OrderHistory = () => {
       <Typography variant="h4" gutterBottom align="center" sx={{ mt: 4 }}>
         Recent Orders
       </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          mb: 2,
+          width: "100%",
+        }}
+      >
+        <Box sx={{ marginLeft: "auto" }}>
+          <OrderSortDropdown onSortChange={handleSortChange} />
+        </Box>
+      </Box>
       {loading && (
         <Box
           sx={{

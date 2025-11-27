@@ -17,7 +17,6 @@ import OrderSortDropdown from "../../components/Common/OrderSortDropdown";
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [originalOrders, setOriginalOrders] = useState([]);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -27,9 +26,10 @@ const OrderHistory = () => {
     setLoading(true);
     try {
       const data = await getOrders();
-      // console.log("data", data);
-      setOrders(data);
-      setOriginalOrders(data);
+      const sorted = [...data].sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+      setOrders(sorted);
     } catch (error) {
       setSnackbar({
         open: true,
@@ -42,7 +42,7 @@ const OrderHistory = () => {
   };
 
   const handleSortChange = (sortType) => {
-    let sorted = [...originalOrders];
+    let sorted = [...orders];
 
     if (sortType === "newest") {
       sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));

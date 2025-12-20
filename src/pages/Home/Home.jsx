@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { getCategories } from "../../api/categories";
 import NotificationSnackbar from "../../components/Common/NotificationSnackbar";
 import { useNavigate } from "react-router-dom";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -41,9 +42,32 @@ const Home = () => {
   }, []);
   return (
     <Container>
-      <Typography variant="h4" component="div" mb={3}>
-        Select a Category
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          maxWidth: 1100,
+        }}
+      >
+        <Typography variant="h4" component="div" mb={2}>
+          Select a Category
+        </Typography>
+        <Typography
+          variant="h4"
+          component="div"
+          mb={2}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            cursor: "pointer",
+          }}
+          onClick={() => navigate("/orderHistory")}
+        >
+          Order History
+        </Typography>
+      </Box>
       {loading ? (
         <Box
           sx={{

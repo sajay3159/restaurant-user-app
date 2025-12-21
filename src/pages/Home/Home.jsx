@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { getCategories } from "../../api/categories";
 import NotificationSnackbar from "../../components/Common/NotificationSnackbar";
 import { useNavigate } from "react-router-dom";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const Home = () => {
   const navigate = useNavigate();
